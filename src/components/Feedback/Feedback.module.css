@@ -1,0 +1,12 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.list li {
+  text-transform: capitalize;
+  font-size: 20px;
+}
