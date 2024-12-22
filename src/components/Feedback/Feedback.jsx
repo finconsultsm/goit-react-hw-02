@@ -1,10 +1,8 @@
 import sc from "./Feedback.module.css";
 
-const Feedback = ({ options, totalFeedback }) => {
+const Feedback = ({ options, totalFeedback, positiveFeedback }) => {
   const optionsBtn = Object.entries(options);
-  const positiveFeedback = Math.round(
-    ((options.good + options.neutral) / totalFeedback) * 100
-  );
+
   if (totalFeedback > 0) {
     return (
       <ul className={sc.list}>

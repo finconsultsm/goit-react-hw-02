@@ -18,6 +18,9 @@ const initialOptions = savedData
 function App() {
   const [options, setOptions] = useState(initialOptions);
   const totalFeedback = options.good + options.neutral + options.bad;
+  const positiveFeedback = Math.round(
+    ((options.good + options.neutral) / totalFeedback) * 100
+  );
 
   localStorage.setItem("options", JSON.stringify(options));
 
@@ -29,7 +32,11 @@ function App() {
         totalFeedback={totalFeedback}
         setOtions={setOptions}
       />
-      <Feedback options={options} totalFeedback={totalFeedback} />
+      <Feedback
+        options={options}
+        totalFeedback={totalFeedback}
+        positiveFeedback={positiveFeedback}
+      />
     </div>
   );
 }
