@@ -1,8 +1,9 @@
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Description from "./components/Description/Description";
 import Options from "./components/Options/Options";
 import Feedback from "./components/Feedback/Feedback";
+import Notification from "./components/Notification/Notification";
 
 const item = {
   title: "Sip Happens Cafe",
@@ -18,11 +19,28 @@ const initialOptions = savedData
 function App() {
   const [options, setOptions] = useState(initialOptions);
   const totalFeedback = options.good + options.neutral + options.bad;
-  const positiveFeedback = Math.round(
-    ((options.good + options.neutral) / totalFeedback) * 100
-  );
+  const positiveFeedback =
+    Math.round((options.good / totalFeedback) * 100) || 0;
 
-  localStorage.setItem("options", JSON.stringify(options));
+  useEffect(() => {
+    localStorage.setItem("options", JSON.stringify(options));
+  }, [options]);
+
+  const handleFeedback = (type) => {
+    setOptions((prev) => ({
+      ...prev,
+      [type]: prev[type] + 1,
+    }));
+  };
+
+  const resetFeedback = () => {
+    const resrtOptions = Object.keys(options).reduce((acc, option) => {
+      acc[option] = 0;
+      return acc;
+    }, {});
+
+    setOptions(resrtOptions);
+  };
 
   return (
     <div className="App">
@@ -30,13 +48,18 @@ function App() {
       <Options
         options={options}
         totalFeedback={totalFeedback}
-        setOtions={setOptions}
+        handleFeedback={handleFeedback}
+        resetFeedback={resetFeedback}
       />
-      <Feedback
-        options={options}
-        totalFeedback={totalFeedback}
-        positiveFeedback={positiveFeedback}
-      />
+      {totalFeedback > 0 ? (
+        <Feedback
+          options={options}
+          totalFeedback={totalFeedback}
+          positiveFeedback={positiveFeedback}
+        />
+      ) : (
+        <Notification message="No feedback yet" />
+      )}
     </div>
   );
 }
